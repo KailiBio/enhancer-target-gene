@@ -39,9 +39,7 @@ scp lixiangr@z006:/data/tusers/lixiangr/BENGI/scripts/AUPR.R ./
 ```
 
 
-
-
-## Step 1 : Generate original feature matrices for both peaks and signal files && Generating matrices to calculate RF AUPR
+## Step 1 : Generate feature matrices && Prune features
 
 ### z006
 
@@ -87,7 +85,8 @@ do
 done
 ```
 
-## Step 2 : Calculating RF AUPR, gini FI or perm FI
+
+## Step 2 : Calculate RF AUPR, gini FI or perm FI
 
 ### z018
 
@@ -95,7 +94,6 @@ done
 bash /data/tusers/lixiangr/BENGI/scripts/Calculating-AUPR-and-FI-slurm.sh > /data/tusers/lixiangr/BENGI/scripts/Calculating-AUPR-and-FI.slurm
 sbatch /data/tusers/lixiangr/BENGI/scripts/Calculating-AUPR-and-FI.slurm
 ```
-
 
 
 ## Step 3 : Top 16 from FI_perm and FI_gini
@@ -117,12 +115,13 @@ do
 				bash /data/tusers/lixiangr/BENGI/scripts/RF-of-topN.sh ${cell} ${data} ${Data_collection} ${Data_form} ${data_class} sort 16 > ${loggingDir}/AUPR-and-topN-${total}.nohup
 		    done
 	    done
+        wait;
 	done
 done
 ```
 
 
-## Step 4 : AUPR of full, perm16 and gini16
+## Step 4 : AUPR of the full, perm16 and gini16 models
 
 ### z006
 
@@ -141,6 +140,9 @@ do
 				bash /data/tusers/lixiangr/BENGI/scripts/AUPR-value.sh ${cell} ${data} ${Data_collection} ${Data_form} ${data_class} full > ${loggingDir}/AUPR-value-full.nohup
 				bash /data/tusers/lixiangr/BENGI/scripts/AUPR-value.sh ${cell} ${data} ${Data_collection} ${Data_form} ${data_class} gini16 > ${loggingDir}/AUPR-value-gini16.nohup
 				bash /data/tusers/lixiangr/BENGI/scripts/AUPR-value.sh ${cell} ${data} ${Data_collection} ${Data_form} ${data_class} perm16 > ${loggingDir}/AUPR-value-perm16.nohup
+                echo "${loggingDir}/AUPR-value-full.nohup"
+                echo "${loggingDir}/AUPR-value-gini16.nohup"
+                echo "${loggingDir}/AUPR-value-perm16.nohup"
 		    done
 	    done
 	done
